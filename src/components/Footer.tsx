@@ -1,17 +1,33 @@
 import { Crown, Facebook, Instagram, MapPin, Phone, Twitter } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const columns = [
   {
     heading: "What's On",
-    links: ["All Shows", "Coming Soon", "Pantomime", "Gift Vouchers"],
+    links: [
+      { label: "All Shows", to: "/whats-on" },
+      { label: "Pantomime", to: "/pantomime" },
+      { label: "Gift Vouchers", to: "/gift-vouchers" },
+      { label: "Booking Information", to: "/booking-information" },
+    ],
   },
   {
     heading: "Your Visit",
-    links: ["Getting Here", "Accessibility", "Seating Plan", "Theatre Tours"],
+    links: [
+      { label: "Getting Here", to: "/#visit" },
+      { label: "Accessibility", to: "/#visit" },
+      { label: "Seating Plan", to: "/#visit" },
+      { label: "Theatre Tours", to: "/theatre-tours" },
+    ],
   },
   {
     heading: "About",
-    links: ["Our History", "Private Hire", "Creative Learning", "Careers"],
+    links: [
+      { label: "Our History", to: "/history" },
+      { label: "Private Hire", to: "/private-hire" },
+      { label: "Creative Learning", to: "/creative-learning" },
+      { label: "Work With Us", to: "/work-with-us" },
+    ],
   },
 ];
 
@@ -20,7 +36,7 @@ const Footer = () => (
     <div className="mx-auto max-w-7xl px-5 md:px-8">
       <div className="grid gap-12 md:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div>
-          <a href="#top" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-full border border-gold/40 text-gold">
               <Crown className="h-5 w-5" aria-hidden="true" />
             </span>
@@ -32,7 +48,7 @@ const Footer = () => (
                 Windsor · Est. 1793
               </span>
             </span>
-          </a>
+          </Link>
           <address className="mt-6 space-y-3 text-sm not-italic font-light text-cream/60">
             <p className="flex items-start gap-2.5">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" aria-hidden="true" />
@@ -71,13 +87,13 @@ const Footer = () => (
             <h3 className="eyebrow text-[0.65rem] text-gold">{col.heading}</h3>
             <ul className="mt-5 space-y-3">
               {col.links.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#top"
+                <li key={link.label}>
+                  <Link
+                    to={link.to}
                     className="text-sm font-light text-cream/60 transition-colors duration-300 hover:text-gold"
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>

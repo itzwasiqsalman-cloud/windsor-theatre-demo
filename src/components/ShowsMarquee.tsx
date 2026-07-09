@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { CalendarDays, ChevronLeft, ChevronRight, Ticket } from "lucide-react";
-import { shows, type Show } from "@/data/shows";
+import { Link } from "react-router-dom";
+import { featuredShows, type Show } from "@/data/shows";
 import { useBooking } from "@/components/booking/BookingContext";
 
 const AUTO_SPEED = 35; // px per second, matches the previous 60s CSS loop
@@ -175,10 +176,19 @@ const ShowsMarquee = () => {
             What's On <span className="italic text-gold-bright">&amp;</span>{" "}
             Coming Soon
           </h2>
-          <p className="max-w-sm text-sm font-light leading-relaxed text-cream/60">
-            From gripping drama to legendary pantomime. Hover over any
-            production to reveal the story and book your seats.
-          </p>
+          <div className="max-w-sm">
+            <p className="text-sm font-light leading-relaxed text-cream/60">
+              From gripping drama to legendary pantomime. Hover over any
+              production to reveal the story and book your seats.
+            </p>
+            <Link
+              to="/whats-on"
+              className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-gold transition-colors duration-300 hover:text-gold-bright"
+            >
+              View the full season, month by month
+              <span aria-hidden="true">→</span>
+            </Link>
+          </div>
         </div>
         <div className="flourish mt-10" />
       </motion.div>
@@ -226,11 +236,11 @@ const ShowsMarquee = () => {
           ref={trackRef}
           className="flex w-max gap-6 px-6 py-4 will-change-transform md:gap-8"
         >
-          {shows.map((show) => (
+          {featuredShows.map((show) => (
             <ShowCard key={show.id} show={show} />
           ))}
           {/* Duplicate list for a seamless loop */}
-          {shows.map((show) => (
+          {featuredShows.map((show) => (
             <ShowCard key={`${show.id}-loop`} show={show} />
           ))}
         </ul>

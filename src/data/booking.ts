@@ -8,6 +8,8 @@
  * Opayo...) with the same signatures. The UI never changes.
  */
 
+import { shows } from "@/data/shows";
+
 export type BandId = "A" | "B" | "C" | "D" | "BOX";
 
 export interface PriceBand {
@@ -241,17 +243,8 @@ export const sectionName = (id: string) =>
   venue.sections.find((s) => s.id === id)?.name ?? id;
 
 /* ------------------------------------------------------------------ */
-/* Performance schedules per show                                      */
+/* Performance schedules, derived from each show's run in shows.ts     */
 /* ------------------------------------------------------------------ */
-
-const runs: Record<string, { start: string; end: string }> = {
-  "our-man-in-havana": { start: "2026-07-01", end: "2026-07-11" },
-  "hidden-dangers-of-camping": { start: "2026-07-17", end: "2026-07-25" },
-  "we-will-rock-you": { start: "2026-08-19", end: "2026-08-22" },
-  "heathers-the-musical": { start: "2026-08-26", end: "2026-08-29" },
-  "twelve-angry-men": { start: "2026-09-03", end: "2026-09-12" },
-  "jack-and-the-beanstalk": { start: "2026-11-20", end: "2027-01-10" },
-};
 
 const dateFmt = new Intl.DateTimeFormat("en-GB", {
   weekday: "short",
@@ -265,17 +258,22 @@ const soldPctFor = (performanceId: string) => {
 };
 
 function generatePerformances(showId: string): Performance[] {
-  const run = runs[showId];
-  if (!run) return [];
+  const show = shows.find((s) => s.id === showId);
+  if (!show) return [];
   const performances: Performance[] = [];
-  const day = new Date(`${run.start}T12:00:00`);
-  const end = new Date(`${run.end}T12:00:00`);
+  const day = new Date(`${show.startIso}T12:00:00`);
+  const end = new Date(`${show.endIso}T12:00:00`);
+  const singleDay = show.startIso === show.endIso;
 
   while (day <= end && performances.length < 12) {
     const dow = day.getDay();
-    if (dow !== 0) {
+    // One-night events play whatever day they fall on; runs skip Sundays
+    if (singleDay || dow !== 0) {
       const iso = day.toISOString().slice(0, 10);
-      const slots = dow === 4 || dow === 6 ? ["2:30 PM", "7:30 PM"] : ["7:30 PM"];
+      const slots =
+        !singleDay && (dow === 4 || dow === 6)
+          ? ["2:30 PM", "7:30 PM"]
+          : ["7:30 PM"];
       for (const timeLabel of slots) {
         if (performances.length >= 12) break;
         const id = `${showId}_${iso}_${timeLabel.replace(/[\s:]/g, "")}`;
