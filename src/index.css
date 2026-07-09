@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Royal Theatre Windsor design tokens ---- */
+  --color-ink: #14100d; /* warm near-black — auditorium dark */
+  --color-ink-soft: #1e1813;
+  --color-ink-raised: #29211a;
+  --color-gold: #c9a24b; /* champagne gold */
+  --color-gold-bright: #e3c37a;
+  --color-gold-deep: #96742a;
+  --color-crimson: #7c2230; /* house-curtain burgundy */
+  --color-crimson-bright: #a52a3d;
+  --color-cream: #f7f1e6; /* light body sections */
+  --color-cream-soft: #efe6d5;
+  --color-parchment: #fdfaf3;
+  --color-cocoa: #3d3125; /* body text on cream */
+  --color-cocoa-muted: #6f604d;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-ink);
+}
+
+/* Small-caps eyebrow label used throughout */
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+/* 3D flip helpers (not expressible with core Tailwind utilities) */
+.perspective-1200 {
+  perspective: 1200px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.flip-inner {
+  transition: transform 700ms var(--ease-out-expo);
+}
+.flip-card:hover .flip-inner,
+.flip-card:focus-within .flip-inner,
+.flip-card.is-flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+
+/* Gold keyline flourish under section headings */
+.flourish {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold) 20%,
+    var(--color-gold) 80%,
+    transparent
+  );
+  height: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .flip-inner {
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
